@@ -21,20 +21,21 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit from common.mk
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
 
-# Inherit some common Arrow-OS stuff
-$(call inherit-product, vendor/arrow/config/common.mk)
+# Inherit some common AOSP stuff
+$(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
+# Bootanimation
 TARGET_BOOT_ANIMATION_RES := 1080
+
 IS_PHONE := true
+
 PRODUCT_BRAND := Sony
 PRODUCT_DEVICE := pdx206
 PRODUCT_MANUFACTURER := Sony
-PRODUCT_NAME := arrow_pdx206
+PRODUCT_NAME := aosp_pdx206
 PRODUCT_MODEL := Xperia 5 II
+
+# GMS
 PRODUCT_GMS_CLIENTID_BASE := android-sonymobile
 
 TARGET_VENDOR_PRODUCT_NAME := pdx206
-
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="Sony/pdx206/pdx2062 10 QKQ1.200108.002 1:user release-keys"
-BUILD_FINGERPRINT := Sony/pdx206/pdx206:10/QKQ1.200108.002/1:user/release-keys
