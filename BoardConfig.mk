@@ -19,6 +19,9 @@
 
 DEVICE_PATH := device/sony/pdx206
 
+# Hacks
+RELAX_USES_LIBRARY_CHECK := true
+
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2560
 TARGET_SCREEN_WIDTH := 1440
