@@ -1,0 +1,87 @@
+# Copyright 2014 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+include device/sony/edo/PlatformConfig.mk
+
+TARGET_BOOTLOADER_BOARD_NAME := XQ-AS52
+
+KERNEL_PATH := device/sony/common-kernel
+
+# Platform
+PRODUCT_PLATFORM := edo
+
+# Kernel cmdline
+BOARD_KERNEL_CMDLINE += androidboot.hardware=pdx206
+BOARD_KERNEL_CMDLINE += androidboot.fstab_suffix=pdx206
+
+# Partition information
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x06000000
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 100663296
+BOARD_DTBOIMG_PARTITION_SIZE := 25165824 # (0x1800000)
+
+BOARD_ODMIMAGE_PARTITION_SIZE := 996147200 # (0x3B600000)
+
+BOARD_SUPER_PARTITION_SIZE := 12348030976 # (0x2E0000000)
+BOARD_SUPER_PARTITION_GROUPS := sod_dynamic_partitions
+
+# Set error limit to SUPER_PARTITION_SIZE - 500MiB
+BOARD_SUPER_PARTITION_ERROR_LIMIT := 11823742976
+
+# DYNAMIC_PARTITIONS_SIZE = (SUPER_PARTITION_SIZE / 2) - 4MB
+BOARD_SOD_DYNAMIC_PARTITIONS_SIZE := 6169821184
+BOARD_SOD_DYNAMIC_PARTITIONS_PARTITION_LIST := \
+    system \
+    vendor \
+    product
+
+# Slightly overprovision dynamic partitions with 50MiB to
+# allow on-device file editing
+BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 52428800
+BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 52428800
+BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 52428800
+
+# Reserve space for data encryption (111267151872-16384)
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 111267135488
+
+# Kernel
+BOARD_BOOT_HEADER_VERSION := 2
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_RAMDISK_OFFSET := 0x01000000
+BOARD_KERNEL_SECOND_OFFSET := 0x00f00000
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+BOARD_KERNEL_OFFSET := 0x00008000
+BOARD_DTB_OFFSET           := 0x01f00000
+BOARD_KERNEL_IMAGE_NAME := Image
+BOARD_KERNEL_SEPARATED_DTBO := true
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
+
+BOARD_KERNEL_SEPARATED_DT := false
+TARGET_PREBUILT_KERNEL := $(KERNEL_PATH)/zimage
+BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PATH)/dtbo.img
+
+BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
+BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_KERNEL_PAGESIZE)
+BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --second_offset $(BOARD_KERNEL_SECOND_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+
+# Flags
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
